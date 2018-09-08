@@ -1,5 +1,6 @@
 var KEYS = ['c', 'd', 'e', 'f'];
 var NOTE_DURATION = 1000;
+var WAIT_TIME = 2500;
 
 // NoteBox
 //
@@ -17,13 +18,13 @@ function NoteBox(key, onClick) {
 	var enabled = true;
 	// Counter of how many play calls have been made without completing.
 	// Ensures that consequent plays won't prematurely remove the active class.
-	var playing = 0;
+	playing = 0;
 
 	this.key = key;
 	this.onClick = onClick || function () {};
 
 	// Plays the audio associated with this NoteBox
-	this.play = function () {
+	this.play = function play1 () {
 		playing++;
 		// Always play from the beginning of the file.
 		audioEl.currentTime = 0;
@@ -52,14 +53,53 @@ function NoteBox(key, onClick) {
 	// Call this NoteBox's clickHandler and play the note.
 	this.clickHandler = function () {
 		if (!enabled) return;
-
+		
 		this.onClick(this.key)
 		this.play()
+
+		list[played] = this.key;
+		played ++;
+		var prevLength = list.length;
+		console.log(list + "   " + prevLength);
+
+		list.forEach(function(key,i) 
+				{
+				setTimeOut(notes[key].play.bind(null, key), i * NOTE_DURATION)
+				}
+		)
+
+		setTimeOut(check, WAIT_TIME);
+
+		//this.onClick(this.key)
+		//this.play()
 	}.bind(this)
 
+	function check(){
+		currLength = list.length;
+
+		if (prevLength == currLength){
+
+			list.forEach(function(key,i) 
+				{
+				setTimeOut(notes[key].play.bind(null, key), i * NOTE_DURATION)
+				}
+			)
+			
+			//restart game
+			list = [];
+			played = 0;
+		}
+	}
+
+	
+
 	boxEl.addEventListener('mousedown', this.clickHandler);
+
 }
 
+
+var played = 0;
+var list = [];
 // Example usage of NoteBox.
 //
 // This will create a map from key strings (i.e. 'c') to NoteBox objects so that
@@ -71,6 +111,6 @@ KEYS.forEach(function (key) {
 	notes[key] = new NoteBox(key);
 });
 
-KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
+/*KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
 	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
-});
+});*/
