@@ -1,0 +1,6 @@
+As a new JavaScript learner, I am a little confused about the idea of "this" and "bind(this)". 
+I find it problematic especially when I try to use the method. 
+For instance, I got a warning "Uncaught ReferenceError: setTimeOut is not defined" on line 65 in my js file.
+I have tried different ways to implement the method, but I am still getting the warning regardless of my approach.
+I believe this is because I am not referencing methods correctly, hence unrecognizable to the computer.
+And this is one of the main reasons why my code does not produce the expected result.
